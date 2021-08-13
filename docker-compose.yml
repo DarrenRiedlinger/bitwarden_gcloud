@@ -57,7 +57,14 @@ services:
   proxy:
     # Caddy provides an automatic HTTPS reverse proxy with Let's Encrypt cert provisioning
     # https://caddyserver.com/
-    image: caddy/caddy:alpine
+    
+    # Choose one below
+    # Option 1: Use prebuilt caddy docker image (without custom plugins)
+    # image: caddy/caddy:alpine
+    # Option 2: Build Caddy, with optional plugins as specified in .Dockerfile
+    build:
+        context: .
+
     restart: always
     container_name: proxy
     volumes:
@@ -72,6 +79,7 @@ services:
     - ACME_AGREE=true                   # agree to ACME for auto HTTPS
     - DOMAIN                            # Value-less variables are set in .env
     - EMAIL
+    - DNS_API_KEY                       # If building caddy with a dns plugin
 
 
   ddns:

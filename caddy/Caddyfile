@@ -11,9 +11,18 @@
     level INFO
   }
 
-  # Uncomment only one of the 2 lines. Depending if you provide your own cert or request one from Let's Encrypt
+  # Uncomment only one of the 3 options below. Depending if you provide your own cert or request one from Let's Encrypt
+  # Option 1: Use a DNS-issues origin CA certificate
   # tls {$SSLCERTIFICATE} {$SSLKEY}
-  tls {$EMAIL}
+
+  # Option 2: Use ACME HTTP-1 challenge. With this option you must bypass any upstream proxying
+  # tls {$EMAIL}
+
+  # Option 3: Use ACME DNS-01 challenge.  Requires building Caddy binary with a DNS plugin for your provider
+  # I.e. select the "build" option in docker-compose.yml and configure Dockerfile with appropriate plugin
+  tls {
+  	dns cloudflare {$CF_API}
+	}
 
   encode zstd gzip
 
